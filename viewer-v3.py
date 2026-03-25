@@ -156,8 +156,8 @@ def allocate_units(shares: np.ndarray, total_units_next_period: int) -> np.ndarr
 # ============================================================
 # STREAMLIT UI
 # ============================================================
-st.set_page_config(page_title="Simple Category Forecaster", layout="wide")
-st.title("Simple Category Forecaster")
+st.set_page_config(page_title="Capsim Forecaster", layout="wide")
+st.title("Capsim Forecaster")
 
 try:
     model, model_path = load_latest_keras_model()
@@ -176,26 +176,26 @@ with col2:
 with col3:
     growth_rate_pct = st.number_input("Expected growth next period (%)", value=10.0, step=0.1)
 with col4:
-    product_count = st.number_input("Number of products in category", min_value=2, value=6, step=1)
+    product_count = st.number_input("Number of products in category", min_value=2, value=5, step=1)
 
 st.subheader("Category Targets")
 t1, t2, t3, t4 = st.columns(4)
 with t1:
-    exp_age = st.number_input("Expected age", min_value=0.1, value=2.0, step=0.1)
+    exp_age = st.number_input("Target age", min_value=0.1, value=2.0, step=0.1)
 with t2:
-    exp_price_low = st.number_input("Expected price low", min_value=0.01, value=19.0, step=0.1)
+    exp_price_low = st.number_input("Target price low", min_value=0.01, value=19.0, step=0.1)
 with t3:
-    exp_price_high = st.number_input("Expected price high", min_value=0.01, value=29.0, step=0.1)
+    exp_price_high = st.number_input("Target price high", min_value=0.01, value=29.0, step=0.1)
 with t4:
-    exp_performance = st.number_input("Expected performance", min_value=0.01, value=6.4, step=0.1)
+    exp_performance = st.number_input("Target performance", min_value=0.01, value=6.4, step=0.1)
 
 t5, t6, t7 = st.columns(3)
 with t5:
-    exp_size = st.number_input("Expected size", min_value=0.01, value=13.6, step=0.1)
+    exp_size = st.number_input("Target size", min_value=0.01, value=13.6, step=0.1)
 with t6:
-    exp_reliability_low = st.number_input("Expected reliability low", min_value=1, value=14000, step=100)
+    exp_reliability_low = st.number_input("Target reliability low", min_value=1, value=14000, step=100)
 with t7:
-    exp_reliability_high = st.number_input("Expected reliability high", min_value=1, value=19000, step=100)
+    exp_reliability_high = st.number_input("Target reliability high", min_value=1, value=19000, step=100)
 
 if exp_age < 0.5:
     exp_age = 0.5

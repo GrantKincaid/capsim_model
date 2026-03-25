@@ -166,7 +166,6 @@ except Exception as e:
     st.stop()
 
 st.caption(f"Loaded model: {model_path}")
-st.caption("This app sends model inputs using the Keras input names `numeric_features` and `category`, which still match the new training code.")
 
 st.subheader("Category Setup")
 col1, col2, col3, col4 = st.columns(4)

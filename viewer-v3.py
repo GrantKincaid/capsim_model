@@ -479,7 +479,7 @@ if targets["ExpReliabilityLow"] >= targets["ExpReliabilityHigh"]:
     st.stop()
 
 st.subheader("Imported products")
-st.caption("The workbook values are preloaded here. You can edit any product before forecasting.")
+st.caption("You can edit any product before forecasting.")
 
 editable_df = st.data_editor(
     selected_products,
@@ -530,7 +530,7 @@ if run_forecast:
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
 st.subheader("Single-dimension optimization")
-st.caption("This does not change the product for the user. It only shows the forecast curve while all other products and values stay fixed.")
+st.caption("Shows the forecast curve while all other products and values stay fixed.")
 
 if len(editable_df) == 0:
     st.warning("Add at least one product to use the optimization tool.")

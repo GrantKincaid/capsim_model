@@ -185,20 +185,34 @@ def _extract_products(sheet_df: pd.DataFrame) -> pd.DataFrame:
         "Performance",
         "Size",
         "Reliability",
-        "Sales Budget",
+        "Customer Accessibility",
+        "Customer Awareness",
     ]
     product_df = product_df[[c for c in keep_cols if c in product_df.columns]].copy()
     product_df = product_df[product_df["Name"].notna()].copy()
     product_df["Name"] = product_df["Name"].astype(str).str.strip()
     product_df = product_df[product_df["Name"] != ""]
 
-    for col in ["Price", "Age", "Performance", "Size", "Reliability"]:
-        product_df[col] = pd.to_numeric(product_df[col], errors="coerce")
+    for col in [
+        "Price",
+        "Age",
+        "Performance",
+        "Size",
+        "Reliability",
+        "Customer Accessibility",
+        "Customer Awareness",
+    ]:
+        if col in product_df.columns:
+            product_df[col] = pd.to_numeric(product_df[col], errors="coerce")
 
-    # Budget in the workbook is a practical default for both accessibility and awareness.
-    budget = pd.to_numeric(product_df.get("Sales Budget", pd.Series(index=product_df.index, dtype=float)), errors="coerce")
-    budget = budget.fillna(0.0)
-    normalized_budget = (budget / 2000.0).clip(lower=0.0, upper=1.0)
+    accessibility = pd.to_numeric(
+        product_df.get("Customer Accessibility", pd.Series(index=product_df.index, dtype=float)),
+        errors="coerce",
+    ).fillna(0.0)
+    awareness = pd.to_numeric(
+        product_df.get("Customer Awareness", pd.Series(index=product_df.index, dtype=float)),
+        errors="coerce",
+    ).fillna(0.0)
 
     out = pd.DataFrame()
     out["Name"] = product_df["Name"]
@@ -207,8 +221,8 @@ def _extract_products(sheet_df: pd.DataFrame) -> pd.DataFrame:
     out["Performance"] = product_df["Performance"].fillna(0.0)
     out["Size"] = product_df["Size"].fillna(0.0)
     out["Reliability"] = product_df["Reliability"].fillna(0.0)
-    out["Acessibility"] = normalized_budget.round(4)
-    out["Awarness"] = normalized_budget.round(4)
+    out["Acessibility"] = accessibility.clip(lower=0.0, upper=1.0).round(4)
+    out["Awarness"] = awareness.clip(lower=0.0, upper=1.0).round(4)
 
     return out[EDITABLE_PRODUCT_COLS].reset_index(drop=True)
 
@@ -479,7 +493,7 @@ if targets["ExpReliabilityLow"] >= targets["ExpReliabilityHigh"]:
     st.stop()
 
 st.subheader("Imported products")
-st.caption("You can edit any product before forecasting.")
+st.caption("The workbook values are preloaded here. You can edit any product before forecasting.")
 
 editable_df = st.data_editor(
     selected_products,
@@ -530,7 +544,7 @@ if run_forecast:
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
 st.subheader("Single-dimension optimization")
-st.caption("Shows the forecast curve while all other products and values stay fixed.")
+st.caption("This does not change the product for the user. It only shows the forecast curve while all other products and values stay fixed.")
 
 if len(editable_df) == 0:
     st.warning("Add at least one product to use the optimization tool.")
